@@ -26,6 +26,19 @@ RSpec.describe Course do
     gradebook.add_course(calculus)
     calculus.enroll(student1) 
     calculus.enroll(student2)
-    expect(gradebook.list_all_students).to eq({calculus: [student1, student2]})
+    expect(gradebook.list_all_students[gradebook.courses[0]]).to eq({calculus: [student1, student2]})
+  end
+
+  it 'can return list of students whose grades below threshold' do
+    gradebook = Gradebook.new("Jim")
+    calculus = Course.new("Calculus", 2)
+    student1 = Student.new({name: "Morgan", age: 21})
+    student2 = Student.new({name: "Jordan", age: 29}) 
+    gradebook.add_course(calculus)
+    calculus.enroll(student1) 
+    calculus.enroll(student2)
+    student1.log_score(89)
+    student2.log_score(78)
+    expect(gradebook.students_below(90)).to eq([student1, student2])
   end
 end
